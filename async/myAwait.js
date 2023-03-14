@@ -1,28 +1,14 @@
 const axios = require('axios');
-async function connect(url){
-    const resp = await axios.get(url);
-    let listOfEntries = resp.data.entries;
-    let Categories = listOfEntries.map((entry) =>{
-        return entry.Category
-    });
-    Categories = [...new Set(Categories)];
-
-    Categories.forEach(async (Category)=>{
-        if (Category.startsWith("A")) {
-        try{
-            const resp = await axios({
-                method: 'get',
-                url: 'https://api.publicapis.org/entries?Category='+Category,
-                responseType: 'json'
-            })
-            console.log(Category+"   "+resp.data.count);
-        }
-        catch(e){
-            console.log(e);
-        }
-    }
+const connectToURL = (url)=>{
+    const req = axios.get(url);
+    req.then(response =>{
+        let listOfEntries = response.data.entries;
+        console.log(listOfEntries);
+        listOfEntries.forEach((entry) =>{
+            console.log(entry.Category);
+        })
     })
 }
-connect('https://api.publicapis.org/entries').catch(err => {
-    console.log(err.toString());
-})
+console.log("Before connect URL");
+connectToURL('https://api.publicapis.org/entries');
+console.log("After connect URL");
